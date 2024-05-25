@@ -1,0 +1,25 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+    <h1>Все новости</h1>
+<h3>на {{ time_now|date:'d M Y' }}</h3>
+<hr>
+<form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Фильтровать</button>
+</form>
+<hr>
+<ul>
+    {% for post in content %}
+        <li>{{ post.title }} / Автор: {{ post.post_author }}</li>
+    {% empty %}
+        <li>Посты не найдены.</li>
+    {% endfor %}
+
+</ul>
+<hr>
+
+
+    <p> Общее количество новостей на странице:  плюс/минус {{ content|length }}, но это не точно :)</p>
+
+{% endblock content %}

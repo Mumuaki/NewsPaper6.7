@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %}
+{% load censor_filter %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+
+
+<h2>{{ post }}</h2>
+<table width="100%" style ="margin-top: 25px">
+           <tr>
+               <th width="300"> АВТОР</th>
+               <td> | </td>
+               <th width="150">ОПУБЛИКОВАНО</th>
+               <td> | </td>
+               <th width="800">СОДЕРЖАНИЕ</th>
+           </tr>
+           <tr class = "table-group-divider">
+               <td>{{ post.post_author }}</td>
+               <td> | </td>
+               <td>{{ post.created_at|date:"d M Y" }}</td>
+               <td> | </td>
+               <td>{{ post.content|censor }}</td>
+           </tr>
+
+       </table>
+
+{% endblock content %}

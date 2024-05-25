@@ -1,0 +1,84 @@
+{% extends 'flatpages/default.html' %}
+{% load censor_filter %}
+
+
+{% block content %}
+    <h1>Все новости</h1>
+<h3>на {{ time_now|date:'d M Y' }}</h3>
+    <form action="" method="get">
+    {{ filterset.form.as_p }}
+    <input type="submit" value="Найти" />
+   </form>
+
+
+    <p> Общее количество новостей на странице:  плюс/минус {{ news|length }}, но это не точно :)</p>
+
+   <hr>
+{% if category_news_list %}
+    <table width="100%" style="margin-top: 35px; table-layout: fixed;">
+        <tr>
+            <th style="width: 25%;">ЗАГОЛОВОК</th>
+            <td> | </td>
+            <th style="width: 15%;">ОПУБЛИКОВАНО</th>
+            <td> | </td>
+            <th style="width: 45%;">СОДЕРЖАНИЕ</th>
+            <td> | </td>
+            <th style="width: 15%;">КАТЕГОРИЯ</th>
+        </tr>
+
+        {% for post in category_news_list %}
+        <tr class="table-group-divider">
+            <td style="width: 25%;">
+                <a href="{% url 'post_id' post.id %}">{{ post.title|truncatewords:8 }}</a>
+                <a href="{% url 'news_edit' post.id %}"><u>Редактировать</u></a>
+                <a href="{% url 'news_delete' post.id %}"><u>Удалить</u></a>
+            </td>
+
+            <td> | </td>
+
+            <td style="width: 15%;">{{ post.created_at|date:"d M Y" }}</td>
+            <td> | </td>
+
+            <td style="width: 45%;">{{ post.content|truncatewords:20 }}</td>
+            <td> | </td>
+
+            <td style="width: 15%;">
+                {% for category in post.category.all %}
+            <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                {% endfor %}
+            </td>
+            <td> | </td>
+            </td>
+            <td> | </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+{% else %}
+    <h5>По Вашему запросу ничего не нашлось? Загляните позже, авторы уже пишут!</h5>
+{% endif %}
+
+
+{# Информация о предыдущих страницах #}
+{% if page_obj.has_previous %}
+    <a href="?{{ request.GET.urlencode }}&page=1{% if filterset %}&{{ filterset.urlencode }}{% endif %}">1</a>
+    {% if page_obj.previous_page_number != 1 %}
+        ...
+        <a href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}{% if filterset %}&{{ filterset.urlencode }}{% endif %}">{{ page_obj.previous_page_number }}</a>
+    {% endif %}
+{% endif %}
+
+{# Информация о текущей странице #}
+{{ page_obj.number }}
+
+{# Информация о следующих страницах #}
+{% if page_obj.has_next %}
+    <a href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}{% if filterset %}&{{ filterset.urlencode }}{% endif %}">{{ page_obj.next_page_number }}</a>
+    {% if paginator.num_pages != page_obj.next_page_number %}
+        ...
+        <a href="?{{ request.GET.urlencode }}&page={{ page_obj.paginator.num_pages }}{% if filterset %}&{{ filterset.urlencode }}{% endif %}">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+{% endif %}
+
+
+{% endblock content %}
