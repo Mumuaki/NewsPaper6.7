@@ -189,3 +189,12 @@ LOGGING = {
         },
     },
 }
+CELERY_BROKER_URL = ('redis://default:ekEFMokNEnaPPUTBnYjkgH5C2g2a4EEU@redis-12604.c328.europe-west3-1.gce.redns'
+                     '.redis-cloud.com:12604')
+CELERY_RESULT_BACKEND = ('redis://default:ekEFMokNEnaPPUTBnYjkgH5C2g2a4EEU@redis-12604.c328.europe-west3-1.gce.redns'
+                         '.redis-cloud.com:12604')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

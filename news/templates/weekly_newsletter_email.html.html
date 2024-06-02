@@ -1,0 +1,8 @@
+<p>Уважаемый, {{ subscriber.username }},</p>
+<p>С настоящим высылаем публикации за последнюю неделю в категориях, на которые Вы подписаны:</p>
+<ul>
+    {% for post in posts %}
+    <li><strong>{{ post.title }}</strong>: {{ post.content }}</li>
+    {% endfor %}
+</ul>
+<p>Искренне Ваши,<br>команда NewsTeam</p>

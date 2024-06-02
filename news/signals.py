@@ -1,9 +1,10 @@
 from django.contrib.admin import action
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from .models import *
 from django.conf import settings
+from .tasks import send_post_notification
 
 
 @receiver(m2m_changed, sender=Post.categories.through)
@@ -37,3 +38,8 @@ def notify_about_new_post(instance, sender, **kwargs):
             msg.attach_alternative(html_content, "text/html")
             msg.send()
 
+
+@receiver(post_save, sender=Post)
+def notify_subscribers(sender, instance, created, **kwargs):
+    if created:
+        send_post_notification.delay(instance.id)
